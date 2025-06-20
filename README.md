@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SymptomHelp AI
 
-## Getting Started
+SymptomHelp AI is an intelligent web application designed to help users gain clarity on their health. Users can describe their symptoms, detail findings from medical scans, and receive AI-driven insights and potential considerations. The app also features AI-assisted refinement of symptom descriptions for better clarity.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Intuitive Symptom Logging**: Easily describe your current symptoms.
+- **Medical Scan Findings Input**: Option to provide details from X-rays, MRIs, CT scans, etc.
+- **AI-Powered Analysis**: Leverages Generative AI (via Genkit) to analyze provided information and suggest potential diagnoses or health considerations.
+- **Symptom Description Improvement**: AI can help refine and improve the clarity and detail of your symptom descriptions.
+- **User Authentication**: Secure sign-up and sign-in functionality using Supabase Auth.
+- **Report History**: Authenticated users can save their symptom analysis reports and review them later.
+- **Responsive Design**: User interface built with ShadCN UI and Tailwind CSS for a seamless experience across devices.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Developer Information
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This application was developed by **Ashutosh Swamy**.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **GitHub**: [github.com/ashutoshswamy](https://github.com/ashutoshswamy)
+- **LinkedIn**: [linkedin.com/in/ashutoshswamy](https://linkedin.com/in/ashutoshswamy)
+- **Twitter**: [twitter.com/ashutoshswamy\_](https://twitter.com/ashutoshswamy_)
 
-## Learn More
+## Disclaimer
 
-To learn more about Next.js, take a look at the following resources:
+SymptomHelp AI is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read or received from this application.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Copyright
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+&copy; 2025 SymptomHelp AI. All rights reserved.

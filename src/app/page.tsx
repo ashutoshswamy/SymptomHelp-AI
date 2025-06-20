@@ -1,103 +1,127 @@
-import Image from "next/image";
+import type { Metadata } from "next";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Stethoscope, BrainCircuit, ShieldCheck, Zap } from "lucide-react";
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: "SymptomHelp AI - Intelligent Health Symptom Analysis",
+  description:
+    "Gain clarity on your health. Describe symptoms, detail scan findings, and receive AI-driven insights with SymptomHelp AI. Get started now.",
+  openGraph: {
+    title: "SymptomHelp AI - Intelligent Health Symptom Analysis",
+    description:
+      "AI-powered insights for your health symptoms and medical scan findings.",
+    type: "website",
+    // url: 'YOUR_CANONICAL_URL_HERE', // Replace with actual deployed URL
+    // images: [ // Replace with actual URL to an OG image
+    //   {
+    //     url: 'YOUR_CANONICAL_URL_HERE/og-image.png',
+    //     width: 1200,
+    //     height: 630,
+    //     alt: 'SymptomHelp AI Promotion',
+    //   },
+    // ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SymptomHelp AI - Intelligent Health Symptom Analysis",
+    description:
+      "AI-powered insights for your health symptoms and medical scan findings.",
+    // images: ['YOUR_CANONICAL_URL_HERE/twitter-image.png'], // Replace
+  },
+};
+
+export default async function HomePage() {
+  const supabase = createSupabaseServerClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (session) {
+    redirect("/dashboard");
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="flex flex-col flex-grow bg-gradient-to-br from-background via-secondary/10 to-background">
+      <header className="container mx-auto py-16 md:py-24 text-center">
+        <div className="inline-block p-5 rounded-2xl bg-primary/10 mx-auto mb-8 shadow-lg">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="80"
+            height="80"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="hsl(var(--primary))"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-heart-pulse"
+            role="img"
+            aria-hidden="true"
+          >
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+            <path d="M3.22 12H9.5l.7-1.44.7 2.88.7-1.44H15" />
+          </svg>
+        </div>
+        <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold text-primary mb-6">
+          SymptomHelp AI
+        </h1>
+        <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-10">
+          Gain clarity on your health. Effortlessly describe symptoms, detail
+          scan findings, and receive AI-driven insights to guide your next
+          steps.
+        </p>
+        <Link href="/auth">
+          <Button
+            size="lg"
+            className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg sm:text-xl px-8 sm:px-10 py-6 sm:py-7 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300"
+          >
+            <Zap className="mr-2 h-5 w-5" /> Get Started Now
+          </Button>
+        </Link>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <main className="container mx-auto py-16 md:py-20 flex-grow">
+        <h2 className="font-headline text-3xl md:text-4xl font-bold text-center text-foreground mb-16">
+          How SymptomHelp AI Empowers You
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+          <div className="p-8 bg-card rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+            <Stethoscope className="w-12 h-12 text-primary mb-4" />
+            <h3 className="font-headline text-2xl font-semibold mb-3">
+              Intuitive Symptom Logging
+            </h3>
+            <p className="text-foreground/70 flex-grow">
+              Clearly articulate your symptoms and provide details from medical
+              scans. Our AI can even help refine your descriptions for better
+              clarity.
+            </p>
+          </div>
+          <div className="p-8 bg-card rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+            <BrainCircuit className="w-12 h-12 text-primary mb-4" />
+            <h3 className="font-headline text-2xl font-semibold mb-3">
+              Advanced AI Analysis
+            </h3>
+            <p className="text-foreground/70 flex-grow">
+              Leverage cutting-edge AI to analyze your information,
+              cross-referencing vast medical knowledge to suggest potential
+              considerations.
+            </p>
+          </div>
+          <div className="p-8 bg-card rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+            <ShieldCheck className="w-12 h-12 text-primary mb-4" />
+            <h3 className="font-headline text-2xl font-semibold mb-3">
+              Secure & Private History
+            </h3>
+            <p className="text-foreground/70 flex-grow">
+              Your health data is handled with utmost security. Create an
+              account to save, review, and track your symptom reports over time.
+            </p>
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
