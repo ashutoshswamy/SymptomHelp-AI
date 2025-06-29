@@ -20,6 +20,12 @@ const AnalyzeSymptomsInputSchema = z.object({
       "A description of findings from medical scans like X-rays, MRIs, CT scans, etc."
     )
     .optional(),
+  reportFileDataUri: z
+    .string()
+    .describe(
+      "A medical report file (image or PDF), as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
+    )
+    .optional(),
 });
 
 export type AnalyzeSymptomsInput = z.infer<typeof AnalyzeSymptomsInputSchema>;
@@ -60,11 +66,16 @@ const prompt = ai.definePrompt({
 
   {{~#if scanFindingsDescription}}
   Medical Scan Findings: {{{scanFindingsDescription}}}
-  {{~else}}
-  No medical scan findings provided.
   {{~/if}}
 
-  Based on this information, provide a list of potential diagnoses, along with confidence levels (0-1) for each diagnosis. Also include any additional notes or recommendations.
+  {{~#if reportFileDataUri}}
+  Medical Report File (Image or PDF): {{media url=reportFileDataUri}}
+  (Analyze the contents of this file, including any text or visual data, as part of the medical report.)
+  {{~else}}
+  No medical report file provided.
+  {{~/if}}
+
+  Based on all this information, provide a list of potential diagnoses, along with confidence levels (0-1) for each diagnosis. Also include any additional notes or recommendations.
   Ensure that the diagnoses are relevant to the symptoms and scan findings provided.
 
   Format your output as a JSON object that adheres to the AnalyzeSymptomsOutputSchema schema.

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Card,
@@ -29,7 +30,15 @@ import {
   type AnalyzeSymptomsOutput,
 } from "@/ai/flows/analyze-symptoms";
 import { improveSymptomDescription } from "@/ai/flows/improve-symptom-description";
-import { Sparkles, CheckCircle, AlertTriangle, Loader2 } from "lucide-react";
+import {
+  Sparkles,
+  CheckCircle,
+  AlertTriangle,
+  Loader2,
+  FileText,
+  Trash2,
+} from "lucide-react";
+import Image from "next/image";
 
 const formSchema = z.object({
   symptomDescription: z
@@ -53,10 +62,17 @@ interface SymptomInputFormProps {
   onAnalysisComplete: (
     result: AnalyzeSymptomsOutput,
     description: string,
-    scanFindings?: string
+    scanFindings?: string,
+    reportFileDataUri?: string
   ) => void;
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
+}
+
+interface FileInfo {
+  dataUri: string;
+  name: string;
+  isImage: boolean;
 }
 
 export default function SymptomInputForm({
@@ -65,6 +81,8 @@ export default function SymptomInputForm({
   setIsLoading,
 }: SymptomInputFormProps) {
   const [isImproving, setIsImproving] = useState(false);
+  const [reportFile, setReportFile] = useState<FileInfo | null>(null);
+  const [fileInputKey, setFileInputKey] = useState(Date.now()); // to reset file input
 
   const { toast } = useToast();
   const form = useForm<SymptomFormValues>({
@@ -74,6 +92,45 @@ export default function SymptomInputForm({
       scanFindingsDescription: "",
     },
   });
+
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 4 * 1024 * 1024) {
+        // 4MB limit
+        toast({
+          title: "File Too Large",
+          description: "Please upload a file smaller than 4MB.",
+          variant: "destructive",
+        });
+        setFileInputKey(Date.now()); // reset file input
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setReportFile({
+          dataUri: reader.result as string,
+          name: file.name,
+          isImage: file.type.startsWith("image/"),
+        });
+      };
+      reader.onerror = () => {
+        toast({
+          title: "Error Reading File",
+          description: "Could not read the selected file.",
+          variant: "destructive",
+        });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setReportFile(null);
+    }
+  };
+
+  const removeFile = () => {
+    setReportFile(null);
+    setFileInputKey(Date.now()); // reset file input so same file can be re-added
+  };
 
   const handleImproveDescription = async () => {
     const description = form.getValues("symptomDescription");
@@ -115,12 +172,14 @@ export default function SymptomInputForm({
       const analysisResult = await analyzeSymptoms({
         symptomDescription: data.symptomDescription,
         scanFindingsDescription: data.scanFindingsDescription,
+        reportFileDataUri: reportFile?.dataUri,
       });
 
       onAnalysisComplete(
         analysisResult,
         data.symptomDescription,
-        data.scanFindingsDescription
+        data.scanFindingsDescription,
+        reportFile?.dataUri
       );
       toast({
         title: "Analysis Complete",
@@ -143,7 +202,8 @@ export default function SymptomInputForm({
           }`,
         },
         data.symptomDescription,
-        data.scanFindingsDescription
+        data.scanFindingsDescription,
+        reportFile?.dataUri
       );
     } finally {
       setIsLoading(false);
@@ -226,6 +286,60 @@ export default function SymptomInputForm({
                 </FormItem>
               )}
             />
+
+            <div className="space-y-2">
+              <Label htmlFor="report-upload" className="text-base">
+                Upload Medical Report (Optional)
+              </Label>
+              <Input
+                key={fileInputKey}
+                id="report-upload"
+                type="file"
+                accept="image/*,application/pdf"
+                onChange={handleFileChange}
+                disabled={isLoading || isImproving || !!reportFile}
+                className="file:text-primary file:font-semibold"
+              />
+              <p className="text-xs text-muted-foreground">
+                Upload an image or PDF of your report (max 4MB) for a more
+                detailed analysis.
+              </p>
+            </div>
+
+            {reportFile && (
+              <div className="mt-4 space-y-2">
+                <Label>File Preview</Label>
+                <div className="relative w-full border-2 border-dashed rounded-lg p-2">
+                  {reportFile.isImage ? (
+                    <div className="relative w-full h-64 flex items-center justify-center">
+                      <Image
+                        src={reportFile.dataUri}
+                        alt="Medical report preview"
+                        layout="fill"
+                        objectFit="contain"
+                        className="rounded-md"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 p-2">
+                      <FileText className="h-10 w-10 text-primary flex-shrink-0" />
+                      <p className="text-sm text-foreground truncate">
+                        {reportFile.name}
+                      </p>
+                    </div>
+                  )}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-1 right-1 h-7 w-7 bg-background/50 hover:bg-destructive/20"
+                    onClick={removeFile}
+                  >
+                    <Trash2 className="h-4 w-4 text-destructive" />
+                    <span className="sr-only">Remove file</span>
+                  </Button>
+                </div>
+              </div>
+            )}
           </CardContent>
           <CardFooter>
             <Button

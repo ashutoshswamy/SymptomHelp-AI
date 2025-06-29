@@ -25,9 +25,13 @@ export default function DashboardPage() {
   const [currentScanFindings, setCurrentScanFindings] = useState<
     string | undefined
   >(undefined);
+  const [currentReportFile, setCurrentReportFile] = useState<
+    string | undefined
+  >(undefined);
   const [isLoading, setIsLoading] = useState(false); // For AI analysis
   const [isSaving, setIsSaving] = useState(false); // For saving report
   const { toast } = useToast();
+  const [formKey, setFormKey] = useState(Date.now()); // Used to reset the form
 
   // Dynamically set title (client-side only, not for SEO bots initially)
   // SEO title is primarily set by src/app/dashboard/layout.tsx
@@ -38,11 +42,13 @@ export default function DashboardPage() {
   const handleAnalysisComplete = (
     result: AnalyzeSymptomsOutput,
     description: string,
-    scanFindings?: string
+    scanFindings?: string,
+    reportFileDataUri?: string
   ) => {
     setAnalysisResult(result);
     setCurrentDescription(description);
     setCurrentScanFindings(scanFindings);
+    setCurrentReportFile(reportFileDataUri);
   };
 
   const handleSaveReport = async () => {
@@ -60,6 +66,7 @@ export default function DashboardPage() {
         symptomDescription: currentDescription,
         scanFindingsDescription: currentScanFindings,
         analysisResult,
+        reportFileDataUri: currentReportFile,
       });
 
       if (error) throw new Error(error);
@@ -72,8 +79,9 @@ export default function DashboardPage() {
       setAnalysisResult(null);
       setCurrentDescription("");
       setCurrentScanFindings(undefined);
-      // Consider resetting the form fields in SymptomInputForm as well
-      // This might involve passing a reset function down or managing form state here.
+      setCurrentReportFile(undefined);
+      // Change the key of the form component to force a re-mount and reset its internal state
+      setFormKey(Date.now());
     } catch (error: any) {
       console.error("Error saving report:", error);
       toast({
@@ -89,6 +97,7 @@ export default function DashboardPage() {
   return (
     <div className="container mx-auto max-w-3xl py-2 space-y-8">
       <SymptomInputForm
+        key={formKey}
         onAnalysisComplete={handleAnalysisComplete}
         isLoading={isLoading}
         setIsLoading={setIsLoading}

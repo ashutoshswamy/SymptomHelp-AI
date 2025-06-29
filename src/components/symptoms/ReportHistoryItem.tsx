@@ -10,14 +10,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { format, parseISO } from "date-fns";
-import { CalendarDays, Pill, FileText } from "lucide-react"; // Replaced ImageIcon with FileText
+import { CalendarDays, Pill, FileText, Download } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Image from "next/image";
 
 interface ReportHistoryItemProps {
   report: SymptomReport;
@@ -31,10 +33,13 @@ export default function ReportHistoryItem({ report }: ReportHistoryItemProps) {
   const primaryDiagnosis =
     report.analysis_result.potentialDiagnoses?.[0] || "N/A";
 
+  const isImage = report.report_file_data_uri?.startsWith("data:image");
+  const isPdf = report.report_file_data_uri?.startsWith("data:application/pdf");
+
   return (
     <Card className="w-full shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between items-start gap-2">
           <div>
             <CardTitle className="font-headline text-xl mb-1">
               Report from {formattedDate.split(" - ")[0]}
@@ -44,11 +49,18 @@ export default function ReportHistoryItem({ report }: ReportHistoryItemProps) {
               {formattedDate.split(" - ")[1]}
             </CardDescription>
           </div>
-          {report.scan_findings_description && (
-            <Badge variant="outline" className="ml-auto text-xs">
-              <FileText className="mr-1 h-3 w-3" /> Scan Findings Provided
-            </Badge>
-          )}
+          <div className="flex flex-col sm:flex-row items-end gap-2 ml-auto flex-shrink-0">
+            {report.report_file_data_uri && (
+              <Badge variant="outline" className="text-xs">
+                <FileText className="mr-1 h-3 w-3" /> Report File
+              </Badge>
+            )}
+            {report.scan_findings_description && (
+              <Badge variant="outline" className="text-xs">
+                <FileText className="mr-1 h-3 w-3" /> Scan Findings
+              </Badge>
+            )}
+          </div>
         </div>
       </CardHeader>
       <CardContent>
@@ -80,6 +92,43 @@ export default function ReportHistoryItem({ report }: ReportHistoryItemProps) {
                   <p className="text-sm text-foreground/80 whitespace-pre-wrap p-2 bg-secondary/30 rounded-md">
                     {report.scan_findings_description}
                   </p>
+                </>
+              )}
+              {report.report_file_data_uri && (
+                <>
+                  <h4 className="font-semibold mb-1 mt-3">
+                    Uploaded Report File:
+                  </h4>
+                  {isImage && (
+                    <div className="relative w-full h-96 border rounded-md overflow-hidden bg-muted/50 p-1">
+                      <Image
+                        src={report.report_file_data_uri}
+                        alt="User uploaded medical report"
+                        layout="fill"
+                        objectFit="contain"
+                        className="rounded-sm"
+                      />
+                    </div>
+                  )}
+                  {isPdf && (
+                    <div className="p-4 border rounded-md bg-muted/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <FileText className="h-8 w-8 text-primary" />
+                        <span className="font-medium text-foreground">
+                          Medical Report PDF
+                        </span>
+                      </div>
+                      <Button asChild variant="outline">
+                        <a
+                          href={report.report_file_data_uri}
+                          download="medical-report.pdf"
+                        >
+                          <Download className="mr-2 h-4 w-4" />
+                          View/Download
+                        </a>
+                      </Button>
+                    </div>
+                  )}
                 </>
               )}
             </AccordionContent>
