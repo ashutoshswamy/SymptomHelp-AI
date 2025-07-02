@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent, useEffect } from "react";
+import { useState, type FormEvent } from "react";
 import { createSupabaseClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { AlertCircle, LogIn, UserPlus, Eye, EyeOff } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 export default function AuthForm() {
   const [email, setEmail] = useState("");
@@ -30,12 +29,6 @@ export default function AuthForm() {
   const router = useRouter();
   const supabase = createSupabaseClient();
   const { toast } = useToast();
-
-  // This form is within AuthLayout which defines metadata
-  // If this component needed to set title itself (e.g. if AuthLayout didn't exist)
-  // useEffect(() => {
-  //   document.title = 'Sign In / Sign Up - SymptomHelp AI';
-  // }, []);
 
   const handleAuth = async (
     event: FormEvent<HTMLFormElement>,
@@ -102,11 +95,8 @@ export default function AuthForm() {
     setShowConfirmPassword(!showConfirmPassword);
 
   return (
-    <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-secondary/30 p-4">
-      <div className="absolute top-4 right-4 z-10">
-        <ThemeToggle />
-      </div>
-      <Card className="w-full max-w-md shadow-2xl">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background via-muted to-background p-4">
+      <Card className="w-full max-w-md shadow-2xl bg-card/80 backdrop-blur-sm border-border/50">
         <CardHeader className="text-center">
           <div className="inline-block p-3 rounded-lg bg-primary/10 mx-auto mb-4">
             <svg

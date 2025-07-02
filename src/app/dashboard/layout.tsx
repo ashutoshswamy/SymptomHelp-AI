@@ -14,15 +14,14 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { LayoutDashboard, History, LogOut, HeartPulse } from "lucide-react";
-// import { Button } from '@/components/ui/button'; // Button is not directly used here
+import { LayoutDashboard, History, HeartPulse } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "Dashboard - SymptomHelp AI",
   description:
     "Manage your symptom analyses, view your report history, and get AI-driven health insights on SymptomHelp AI.",
-  // Add more specific OG/Twitter tags if desired for the dashboard overview
   openGraph: {
     title: "Dashboard - SymptomHelp AI",
     description:
@@ -94,10 +93,8 @@ export default async function DashboardLayout({
         </ScrollArea>
 
         <SidebarFooter className="p-4 mt-auto border-t border-border/70 group-data-[collapsible=icon]:p-2">
-          <div className="group-data-[collapsible=icon]:hidden">
-            <UserNav user={user} />
-          </div>
-          <div className="hidden group-data-[collapsible=icon]:block">
+          <div className="flex items-center justify-between group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:gap-4">
+            <ThemeToggle />
             <UserNav user={user} />
           </div>
         </SidebarFooter>
@@ -112,7 +109,8 @@ export default async function DashboardLayout({
               SymptomHelp
             </span>
           </Link>
-          <div className="ml-auto">
+          <div className="ml-auto flex items-center gap-2">
+            <ThemeToggle />
             <UserNav user={user} />
           </div>
         </header>

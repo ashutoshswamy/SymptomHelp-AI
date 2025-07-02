@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Stethoscope, BrainCircuit, ShieldCheck, Zap } from "lucide-react";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "SymptomHelp AI - Intelligent Health Symptom Analysis",
@@ -14,22 +15,12 @@ export const metadata: Metadata = {
     description:
       "AI-powered insights for your health symptoms and medical scan findings.",
     type: "website",
-    // url: 'YOUR_CANONICAL_URL_HERE', // Replace with actual deployed URL
-    // images: [ // Replace with actual URL to an OG image
-    //   {
-    //     url: 'YOUR_CANONICAL_URL_HERE/og-image.png',
-    //     width: 1200,
-    //     height: 630,
-    //     alt: 'SymptomHelp AI Promotion',
-    //   },
-    // ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SymptomHelp AI - Intelligent Health Symptom Analysis",
     description:
       "AI-powered insights for your health symptoms and medical scan findings.",
-    // images: ['YOUR_CANONICAL_URL_HERE/twitter-image.png'], // Replace
   },
 };
 
@@ -44,7 +35,11 @@ export default async function HomePage() {
   }
 
   return (
-    <div className="flex flex-col flex-grow bg-gradient-to-br from-background via-secondary/10 to-background">
+    <div className="flex flex-col flex-grow relative">
+      <div className="absolute top-4 right-4 z-10">
+        <ThemeToggle />
+      </div>
+      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/20 via-background to-background -z-10"></div>
       <header className="container mx-auto py-16 md:py-24 text-center">
         <div className="inline-block p-5 rounded-2xl bg-primary/10 mx-auto mb-8 shadow-lg">
           <svg
@@ -65,7 +60,7 @@ export default async function HomePage() {
             <path d="M3.22 12H9.5l.7-1.44.7 2.88.7-1.44H15" />
           </svg>
         </div>
-        <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold text-primary mb-6">
+        <h1 className="font-headline text-4xl sm:text-5xl md:text-7xl font-bold text-primary mb-6 bg-clip-text text-transparent bg-gradient-to-br from-foreground to-foreground/60">
           SymptomHelp AI
         </h1>
         <p className="text-lg sm:text-xl md:text-2xl text-foreground/80 max-w-3xl mx-auto mb-10">
@@ -76,7 +71,7 @@ export default async function HomePage() {
         <Link href="/auth">
           <Button
             size="lg"
-            className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg sm:text-xl px-8 sm:px-10 py-6 sm:py-7 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg sm:text-xl px-8 sm:px-10 py-6 sm:py-7 rounded-lg shadow-xl transform hover:scale-105 transition-transform duration-300"
           >
             <Zap className="mr-2 h-5 w-5" /> Get Started Now
           </Button>
@@ -88,7 +83,7 @@ export default async function HomePage() {
           How SymptomHelp AI Empowers You
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-          <div className="p-8 bg-card rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+          <div className="p-8 bg-card/80 backdrop-blur-sm rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col hover:border-primary/50">
             <Stethoscope className="w-12 h-12 text-primary mb-4" />
             <h3 className="font-headline text-2xl font-semibold mb-3">
               Intuitive Symptom Logging
@@ -99,7 +94,7 @@ export default async function HomePage() {
               clarity.
             </p>
           </div>
-          <div className="p-8 bg-card rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+          <div className="p-8 bg-card/80 backdrop-blur-sm rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col hover:border-primary/50">
             <BrainCircuit className="w-12 h-12 text-primary mb-4" />
             <h3 className="font-headline text-2xl font-semibold mb-3">
               Advanced AI Analysis
@@ -110,7 +105,7 @@ export default async function HomePage() {
               considerations.
             </p>
           </div>
-          <div className="p-8 bg-card rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+          <div className="p-8 bg-card/80 backdrop-blur-sm rounded-xl shadow-lg border border-border/50 hover:shadow-2xl transition-shadow duration-300 flex flex-col hover:border-primary/50">
             <ShieldCheck className="w-12 h-12 text-primary mb-4" />
             <h3 className="font-headline text-2xl font-semibold mb-3">
               Secure & Private History
