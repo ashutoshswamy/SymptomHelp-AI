@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SymptomHelp AI
 
-## Getting Started
+AI-powered symptom analysis that provides instant health insights with confidence ratings, severity levels, and personalized recommendations.
 
-First, run the development server:
+🌐 **Live Demo**: [symptomhelpai.in](https://symptomhelpai.in)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **AI-Powered Analysis** - Advanced AI analyzes symptoms with medical-grade precision
+- **Confidence Metrics** - Detailed confidence scores and severity levels for each condition
+- **Urgency Scoring** - Get urgency ratings (1-10) to know when to seek help
+- **Personalized Recommendations** - Actionable advice tailored to your symptoms
+- **Privacy First** - No data stored on servers
+- **Instant Results** - Analysis in under 3 seconds
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework**: Next.js 16
+- **Language**: TypeScript
+- **Styling**: CSS with custom design system
+- **Animations**: Framer Motion
+- **Icons**: Lucide React
+- **AI**: Google Gemini API
+- **Deployment**: Vercel
 
-## Learn More
+## ⚠️ Disclaimer
 
-To learn more about Next.js, take a look at the following resources:
+SymptomHelp AI provides general health information only and is **not a substitute for professional medical advice**. Always consult a qualified healthcare provider for medical concerns.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 👨‍💻 Author
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Ashutosh Swamy**
+- Website: [ashutoshswamy.in](https://ashutoshswamy.in)
+- GitHub: [@ashutoshswamy](https://github.com/ashutoshswamy)
+- LinkedIn: [/in/ashutoshswamy](https://linkedin.com/in/ashutoshswamy)
 
-## Deploy on Vercel
+## 📄 License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This project is licensed under the [MIT License](LICENSE).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Made with ❤️ by [Ashutosh Swamy](https://ashutoshswamy.in)
