@@ -74,22 +74,17 @@ export default function AnalyzePage() {
   };
 
   return (
-    <motion.div 
-      className="app-container"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4 }}
-    >
+    <div className="app-container">
       <Header />
       
       <main className="main-content">
         <motion.div
-          initial={{ opacity: 0, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
         >
           <Link href="/" className="back-link">
-            <ArrowLeft size={18} />
+            <ArrowLeft size={16} />
             Back to Home
           </Link>
         </motion.div>
@@ -98,38 +93,26 @@ export default function AnalyzePage() {
           {!results && !isLoading && (
             <motion.div
               key="input-section"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
             >
-              <div className="hero-section" style={{ marginTop: '1rem' }}>
+              <div className="hero-section" style={{ marginTop: '0.5rem' }}>
                 <motion.div 
                   className="hero-badge"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.2 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.1 }}
                 >
-                  <Sparkles size={16} />
+                  <Sparkles size={14} />
                   AI-Powered Health Insights
                 </motion.div>
-                <motion.h1 
-                  className="hero-title"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  Understand Your Symptoms
-                </motion.h1>
-                <motion.p 
-                  className="hero-description"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 }}
-                >
+                <h1 className="hero-title">Understand Your Symptoms</h1>
+                <p className="hero-description">
                   Enter your symptoms below and get instant AI-powered analysis with 
                   confidence ratings, severity levels, and personalized recommendations.
-                </motion.p>
+                </p>
               </div>
               
               <SymptomInput
@@ -156,69 +139,51 @@ export default function AnalyzePage() {
             <motion.div 
               key="error"
               className="error-container"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <AlertCircle size={24} />
+              <AlertCircle size={22} />
               <h3>Analysis Failed</h3>
               <p>{error}</p>
-              <motion.button 
-                onClick={handleNewAnalysis} 
-                className="retry-button"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
+              <button onClick={handleNewAnalysis} className="retry-button">
                 Try Again
-              </motion.button>
+              </button>
             </motion.div>
           )}
 
           {results && results.success && (
             <motion.div
               key="results"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.3 }}
             >
               <AnalysisResults 
                 analysis={results.analysis} 
                 analyzedSymptoms={results.analyzedSymptoms}
               />
-              <motion.div 
-                className="new-analysis-section"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <motion.button 
+              <div className="new-analysis-section">
+                <button 
                   onClick={handleNewAnalysis} 
                   className="new-analysis-button"
-                  whileHover={{ scale: 1.03, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
                 >
-                  <Sparkles size={18} />
+                  <Sparkles size={16} />
                   Start New Analysis
-                </motion.button>
-              </motion.div>
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </main>
 
-      <motion.footer 
-        className="app-footer"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-      >
+      <footer className="app-footer">
         <p>
           SymptomHelp AI provides general health information only. 
           Always consult a healthcare professional for medical advice.
         </p>
-      </motion.footer>
-    </motion.div>
+      </footer>
+    </div>
   );
 }
-

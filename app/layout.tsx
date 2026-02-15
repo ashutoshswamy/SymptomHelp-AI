@@ -82,7 +82,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <meta name="theme-color" content="#0a0f1a" />
+        <meta name="theme-color" content="#ffffff" />
         <meta name="google-site-verification" content="" />
       </head>
       <body className={`${poppins.variable} antialiased`}>

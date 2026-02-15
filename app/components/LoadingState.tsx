@@ -7,10 +7,10 @@ export default function LoadingState() {
     <div className="loading-container">
       <div className="loading-header">
         <div className="loading-icon">
-          <Sparkles size={24} className="sparkle-animate" />
+          <Sparkles size={22} className="sparkle-animate" />
         </div>
         <h3>Analyzing Your Symptoms</h3>
-        <p>Our AI is reviewing your symptoms and matching them against medical knowledge...</p>
+        <p>Our AI is reviewing your symptoms against medical knowledge...</p>
       </div>
       
       <div className="loading-cards">
