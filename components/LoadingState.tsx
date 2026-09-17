@@ -89,8 +89,8 @@ export function LoadingState({ symptoms }: { symptoms: string }) {
   return (
     <div className="mx-auto max-w-2xl animate-fade-in pt-8 sm:pt-10">
       {/* Symptom summary */}
-      <div className="rounded-2xl border border-border bg-surface p-4 sm:p-6 shadow-[var(--card-shadow)] mb-6 sm:mb-8">
-        <p className="text-xs font-semibold tracking-wider uppercase text-muted mb-2">
+      <div className="rounded-md border border-border bg-surface p-4 sm:p-6 shadow-[var(--card-shadow)] mb-6 sm:mb-8">
+        <p className="font-mono-chart text-xs font-semibold tracking-wider uppercase text-muted mb-2">
           Analyzing
         </p>
         <p className="text-sm text-foreground/80 line-clamp-2 italic">
@@ -124,7 +124,7 @@ export function LoadingState({ symptoms }: { symptoms: string }) {
         </div>
 
         <p className="text-lg font-semibold text-foreground mb-1">
-          AI Analysis in Progress
+          Reading the chart
         </p>
         <p className="text-xs text-muted text-center max-w-sm">
           Cross-referencing symptoms against clinical knowledge powered by
@@ -133,7 +133,7 @@ export function LoadingState({ symptoms }: { symptoms: string }) {
       </div>
 
       {/* Step indicators */}
-      <div className="rounded-2xl border border-border bg-surface p-5 sm:p-6 shadow-[var(--card-shadow)] mb-6">
+      <div className="rounded-md border border-border bg-surface p-5 sm:p-6 shadow-[var(--card-shadow)] mb-6">
         <div className="space-y-0">
           {steps.map((step, i) => {
             const completed = i < activeStep;
@@ -196,7 +196,7 @@ export function LoadingState({ symptoms }: { symptoms: string }) {
 
                   {/* Status text */}
                   <span
-                    className={`text-[10px] font-semibold tracking-wider uppercase transition-all duration-300 ${
+                    className={`font-mono-chart text-[10px] font-semibold tracking-wider uppercase transition-all duration-300 ${
                       completed
                         ? "text-primary"
                         : active
@@ -215,7 +215,7 @@ export function LoadingState({ symptoms }: { symptoms: string }) {
         {/* Progress bar */}
         <div className="mt-4 h-1.5 rounded-full bg-border/40 overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-700 ease-out"
+            className="h-full rounded-full bg-primary transition-all duration-700 ease-out"
             style={{ width: `${((activeStep + 1) / steps.length) * 100}%` }}
           />
         </div>

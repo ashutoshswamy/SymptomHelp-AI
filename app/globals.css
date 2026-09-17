@@ -1,73 +1,66 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fffe;
-  --foreground: #0f172a;
-  --primary: #0d9488;
-  --primary-light: #14b8a6;
-  --primary-dark: #0f766e;
-  --secondary: #06b6d4;
-  --accent: #0891b2;
-  --surface: #ffffff;
-  --surface-hover: #f0fdfa;
-  --border: #e2e8f0;
-  --border-light: #f1f5f9;
-  --muted: #64748b;
-  --muted-light: #94a3b8;
-  --severity-low: #0d9488;
-  --severity-moderate: #f59e0b;
-  --severity-high: #ef4444;
-  --severity-critical: #dc2626;
-  --disclaimer-bg: #fef2f2;
-  --disclaimer-border: #fecaca;
-  --disclaimer-text: #991b1b;
-  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-  --card-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.06);
+  --paper: #f3f4ef;
+  --paper-raised: #ffffff;
+  --paper-raised-hover: #fbfbf8;
+  --ink: #1a2420;
+  --ink-muted: #5b665f;
+  --ink-faint: #8b948c;
+  --line: #d9d6c9;
+  --line-soft: #e7e5db;
+
+  --pulse: #1f7a4d;
+  --pulse-soft: #e4f0e8;
+  --pulse-ink: #14532d;
+
+  --alert: #c1392b;
+  --alert-soft: #fbeae7;
+
+  --amber: #a9720c;
+  --amber-soft: #f6edd9;
+
+  --severity-low: #1f7a4d;
+  --severity-moderate: #a9720c;
+  --severity-high: #c1392b;
+  --severity-critical: #8f1d13;
+
+  --card-shadow: 0 1px 2px 0 rgb(26 36 32 / 0.05);
+  --card-shadow-hover: 0 6px 16px -4px rgb(26 36 32 / 0.10);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-light: var(--primary-light);
-  --color-primary-dark: var(--primary-dark);
-  --color-secondary: var(--secondary);
-  --color-accent: var(--accent);
-  --color-surface: var(--surface);
-  --color-surface-hover: var(--surface-hover);
-  --color-border: var(--border);
-  --color-border-light: var(--border-light);
-  --color-muted: var(--muted);
-  --color-muted-light: var(--muted-light);
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-primary: var(--pulse);
+  --color-surface: var(--paper-raised);
+  --color-surface-hover: var(--paper-raised-hover);
+  --color-border: var(--line);
+  --color-border-light: var(--line-soft);
+  --color-muted: var(--ink-muted);
+  --color-muted-light: var(--ink-faint);
   --color-severity-low: var(--severity-low);
   --color-severity-moderate: var(--severity-moderate);
   --color-severity-high: var(--severity-high);
   --color-severity-critical: var(--severity-critical);
-  --font-sans: var(--font-space-grotesk);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0f1a;
-    --foreground: #e2e8f0;
-    --surface: #141b2d;
-    --surface-hover: #1a2340;
-    --border: #1e293b;
-    --border-light: #1e293b;
-    --muted: #94a3b8;
-    --muted-light: #64748b;
-    --disclaimer-bg: #1c1117;
-    --disclaimer-border: #4c1d25;
-    --disclaimer-text: #fca5a5;
-    --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.2), 0 1px 2px -1px rgb(0 0 0 / 0.2);
-    --card-shadow-hover: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  }
+:root {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  background:
+    linear-gradient(var(--line-soft) 1px, transparent 1px) 0 0 / 100% 28px,
+    var(--paper);
+  color: var(--ink);
+  font-family: var(--font-plex-sans), system-ui, sans-serif;
+}
+
+.font-mono-chart {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 /* Animations */
@@ -77,7 +70,7 @@ body {
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(24px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -87,7 +80,7 @@ body {
 }
 
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -101,22 +94,12 @@ body {
   to { transform: rotate(360deg); }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-@keyframes gradient-shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
 .animate-fill-bar {
   animation: fill-bar 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .animate-slide-up {
-  animation: slide-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: slide-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   opacity: 0;
 }
 
@@ -137,46 +120,57 @@ body {
   animation: spin-slow 2s linear infinite;
 }
 
-.animate-shimmer {
-  background: linear-gradient(90deg, var(--border) 25%, var(--border-light) 50%, var(--border) 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
+@media (prefers-reduced-motion: reduce) {
+  .animate-fill-bar,
+  .animate-slide-up,
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-pulse-gentle,
+  .animate-spin-slow {
+    animation: none !important;
+    opacity: 1 !important;
+  }
 }
 
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 3s ease infinite;
-}
-
-/* Curved left border for condition cards */
-.condition-border-left {
+/* Chart-entry number rail, left of each condition card heading */
+.chart-entry {
   position: relative;
-  overflow: hidden;
 }
 
-.condition-border-left::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8%;
-  bottom: 8%;
-  width: 4px;
-  border-radius: 0 4px 4px 0;
-  background: var(--border-color);
+/* Ink-stamp badge: slight rotation, double border, like a rubber stamp on a form */
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  border: 1.5px solid currentColor;
+  border-radius: 3px;
+  padding: 0.2em 0.65em;
+  transform: rotate(-1.5deg);
+  letter-spacing: 0.06em;
 }
 
-/* Trust badge styles */
+/* Trust / meta strip */
 .trust-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 3px;
+  border: 1px dashed var(--line);
+  background: var(--paper-raised);
+  font-size: 10.5px;
   font-weight: 500;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--ink-muted);
+}
+
+/* Focus visibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--pulse);
+  outline-offset: 2px;
 }

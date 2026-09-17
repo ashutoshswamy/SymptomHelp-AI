@@ -7,10 +7,10 @@ import { SeverityBadge } from "./SeverityBadge";
 import { UrgencyIndicator } from "./UrgencyIndicator";
 
 const borderColors = {
-  low: "#0d9488",
-  moderate: "#f59e0b",
-  high: "#ef4444",
-  critical: "#dc2626",
+  low: "var(--severity-low)",
+  moderate: "var(--severity-moderate)",
+  high: "var(--severity-high)",
+  critical: "var(--severity-critical)",
 } as const;
 
 export function ConditionCard({
@@ -24,11 +24,11 @@ export function ConditionCard({
 
   return (
     <div
-      className="animate-slide-up rounded-2xl border border-border bg-surface shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-all condition-border-left overflow-hidden"
+      className="animate-slide-up rounded-md border border-border bg-surface shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-all overflow-hidden"
       style={{
         animationDelay: `${index * 150}ms`,
-        "--border-color": borderColors[condition.severity],
-      } as React.CSSProperties}
+        borderLeft: `3px solid ${borderColors[condition.severity]}`,
+      }}
     >
       {/* Header - always visible, clickable */}
       <button
@@ -37,21 +37,26 @@ export function ConditionCard({
         className="w-full p-4 sm:p-5 md:p-6 text-left cursor-pointer"
       >
         <div className="flex items-start justify-between gap-2 sm:gap-3 mb-2">
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <SeverityBadge severity={condition.severity} urgency={condition.urgency} />
-              <UrgencyIndicator urgency={condition.urgency} />
+          <div className="min-w-0 flex gap-3">
+            <span className="font-mono-chart text-xs text-muted-light pt-0.5 shrink-0">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <SeverityBadge severity={condition.severity} urgency={condition.urgency} />
+                <UrgencyIndicator urgency={condition.urgency} />
+              </div>
+              <h3 className="text-base sm:text-lg font-semibold text-foreground mt-1.5 break-words">
+                {condition.condition}
+              </h3>
             </div>
-            <h3 className="text-base sm:text-lg font-bold text-foreground mt-1.5 break-words">
-              {condition.condition}
-            </h3>
           </div>
           <div className="text-right shrink-0 flex items-start gap-2 sm:gap-3">
             <div>
-              <span className="text-xl sm:text-2xl font-bold text-foreground tabular-nums">
+              <span className="font-mono-chart text-xl sm:text-2xl font-semibold text-foreground tabular-nums">
                 {condition.confidence}%
               </span>
-              <p className="text-[10px] font-medium tracking-wider uppercase text-muted">
+              <p className="font-mono-chart text-[10px] font-medium tracking-wider uppercase text-muted">
                 Match
               </p>
             </div>
@@ -70,7 +75,7 @@ export function ConditionCard({
         </div>
 
         {/* Confidence bar */}
-        <div>
+        <div className="pl-7">
           <ConfidenceBar
             percentage={condition.confidence}
             severity={condition.severity}
@@ -85,10 +90,10 @@ export function ConditionCard({
         }`}
       >
         <div className="overflow-hidden">
-          <div className="px-4 sm:px-5 md:px-6 pb-4 sm:pb-5 md:pb-6 pt-0 space-y-4">
+          <div className="px-4 sm:px-5 md:px-6 pb-4 sm:pb-5 md:pb-6 pt-0 pl-11 sm:pl-14 space-y-4">
             {/* Description */}
             {condition.description && (
-              <div className="rounded-xl bg-background/60 border border-border/50 p-3.5">
+              <div className="rounded-sm bg-background border border-border-light p-3.5">
                 <p className="text-sm text-foreground/75 leading-relaxed">
                   {condition.description}
                 </p>
@@ -99,14 +104,14 @@ export function ConditionCard({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {condition.matchingSymptoms.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-semibold tracking-wider uppercase text-muted mb-2">
+                  <p className="font-mono-chart text-[10px] font-semibold tracking-wider uppercase text-muted mb-2">
                     Key Indicators
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {condition.matchingSymptoms.map((symptom) => (
                       <span
                         key={symptom}
-                        className="rounded-full border border-primary/20 bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary dark:bg-primary/15"
+                        className="rounded-sm border border-primary/25 bg-[var(--pulse-soft)] px-2.5 py-1 text-xs font-medium text-[var(--pulse-ink)]"
                       >
                         {symptom}
                       </span>
@@ -116,7 +121,7 @@ export function ConditionCard({
               )}
 
               <div>
-                <p className="text-[10px] font-semibold tracking-wider uppercase text-muted mb-2">
+                <p className="font-mono-chart text-[10px] font-semibold tracking-wider uppercase text-muted mb-2">
                   Recommended Actions
                 </p>
                 <ul className="space-y-1.5">

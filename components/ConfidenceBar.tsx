@@ -1,10 +1,10 @@
 "use client";
 
-const barColors = {
-  low: "from-teal-400 to-teal-500",
-  moderate: "from-amber-400 to-amber-500",
-  high: "from-red-400 to-red-500",
-  critical: "from-red-500 to-red-700",
+const barColor = {
+  low: "var(--severity-low)",
+  moderate: "var(--severity-moderate)",
+  high: "var(--severity-high)",
+  critical: "var(--severity-critical)",
 } as const;
 
 export function ConfidenceBar({
@@ -15,10 +15,22 @@ export function ConfidenceBar({
   severity: "low" | "moderate" | "high" | "critical";
 }) {
   return (
-    <div className="h-2 rounded-full bg-border/50 overflow-hidden">
+    <div
+      className="h-2 rounded-[2px] overflow-hidden"
+      style={{
+        backgroundImage:
+          "repeating-linear-gradient(90deg, var(--line) 0, var(--line) 1px, transparent 1px, transparent 6px)",
+        backgroundColor: "var(--line-soft)",
+      }}
+    >
       <div
-        className={`h-full rounded-full bg-gradient-to-r ${barColors[severity]} animate-fill-bar`}
-        style={{ "--bar-width": `${percentage}%` } as React.CSSProperties}
+        className="h-full animate-fill-bar"
+        style={
+          {
+            "--bar-width": `${percentage}%`,
+            backgroundColor: barColor[severity],
+          } as React.CSSProperties
+        }
       />
     </div>
   );

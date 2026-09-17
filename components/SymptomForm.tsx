@@ -69,53 +69,43 @@ export function SymptomForm() {
   return (
     <div>
       {/* Hero Section */}
-      <div className="text-center pt-8 pb-8 sm:pt-16 sm:pb-14">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground leading-tight">
-          Your Health
+      <div className="text-center pt-10 pb-8 sm:pt-16 sm:pb-12">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-foreground leading-[1.1]">
+          Describe what you feel.
           <br />
-          <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent italic">
-            Decoded.
-          </span>
+          <span className="text-primary">We&rsquo;ll read the chart.</span>
         </h1>
-        <p className="mt-3 sm:mt-4 text-sm sm:text-base text-muted max-w-md mx-auto leading-relaxed px-2">
-          Describe your symptoms with clinical precision using our
-          Gemini-powered diagnostic engine.
+        <p className="mt-4 text-sm sm:text-base text-muted max-w-md mx-auto leading-relaxed px-2">
+          Enter symptoms in your own words. Our Gemini-powered engine
+          cross-references them against clinical patterns and returns a
+          ranked read-out.
         </p>
       </div>
 
       {/* Form Card */}
       <div className="mx-auto max-w-2xl">
-        <div className="rounded-2xl border border-border bg-surface p-4 sm:p-6 md:p-8 shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-shadow">
-          <form onSubmit={handleSubmit}>
-            <div className="flex items-center gap-2 mb-3">
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                className="text-primary"
-              >
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                <polyline points="14 2 14 8 20 8" />
-                <line x1="16" y1="13" x2="8" y2="13" />
-                <line x1="16" y1="17" x2="8" y2="17" />
-              </svg>
-              <label
-                htmlFor="symptoms"
-                className="text-xs font-semibold tracking-wider uppercase text-primary"
-              >
-                Describe Your Symptoms
-              </label>
-            </div>
+        <div className="rounded-md border border-border bg-surface shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-shadow overflow-hidden">
+          <div className="flex items-center px-4 sm:px-6 py-3 border-b border-dashed border-border">
+            <span className="font-mono-chart text-[10px] tracking-[0.15em] uppercase text-muted">
+              Patient Intake
+            </span>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 md:p-8 pt-5 sm:pt-6">
+            <label
+              htmlFor="symptoms"
+              className="flex items-baseline gap-2 font-mono-chart text-[11px] font-semibold tracking-wider uppercase text-foreground mb-2"
+            >
+              <span className="text-primary">01</span> Symptoms
+            </label>
             <textarea
               id="symptoms"
               rows={5}
+              maxLength={2000}
               value={symptoms}
               onChange={(e) => setSymptoms(e.target.value)}
               placeholder="Example: I've had a dull ache in my lower back for 3 days, worsening when I sit down. Also feeling slight fatigue..."
-              className="w-full rounded-xl border border-border bg-background/50 px-4 py-3.5 text-sm text-foreground placeholder:text-muted/50 focus:border-primary focus:ring-2 focus:ring-primary/15 focus:outline-none transition-all resize-none"
+              className="w-full rounded-sm border border-border bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-light focus:border-primary focus:outline-none transition-colors resize-none"
               disabled={isLoading}
             />
 
@@ -123,9 +113,9 @@ export function SymptomForm() {
               <div>
                 <label
                   htmlFor="age"
-                  className="block text-xs font-semibold tracking-wider uppercase text-primary mb-2"
+                  className="flex items-baseline gap-2 font-mono-chart text-[11px] font-semibold tracking-wider uppercase text-foreground mb-2"
                 >
-                  Age
+                  <span className="text-primary">02</span> Age
                 </label>
                 <input
                   id="age"
@@ -135,25 +125,25 @@ export function SymptomForm() {
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
                   placeholder="Years"
-                  className="w-full rounded-xl border border-border bg-background/50 px-4 py-3 text-sm text-foreground placeholder:text-muted/50 focus:border-primary focus:ring-2 focus:ring-primary/15 focus:outline-none transition-all"
+                  className="w-full rounded-sm border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-light focus:border-primary focus:outline-none transition-colors"
                   disabled={isLoading}
                 />
               </div>
               <div>
                 <label
                   htmlFor="gender"
-                  className="block text-xs font-semibold tracking-wider uppercase text-primary mb-2"
+                  className="flex items-baseline gap-2 font-mono-chart text-[11px] font-semibold tracking-wider uppercase text-foreground mb-2"
                 >
-                  Gender
+                  <span className="text-primary">03</span> Sex
                 </label>
                 <select
                   id="gender"
                   value={gender}
                   onChange={(e) => setGender(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background/50 px-4 py-3 text-sm text-foreground focus:border-primary focus:ring-2 focus:ring-primary/15 focus:outline-none transition-all appearance-none cursor-pointer"
+                  className="w-full rounded-sm border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none transition-colors appearance-none cursor-pointer"
                   disabled={isLoading}
                 >
-                  <option value="">Select Gender</option>
+                  <option value="">Select</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
@@ -164,16 +154,19 @@ export function SymptomForm() {
             <button
               type="submit"
               disabled={isLoading || !symptoms.trim()}
-              className="mt-6 w-full rounded-xl bg-gradient-to-r from-primary to-secondary py-3.5 text-sm font-semibold text-white shadow-sm transition-all hover:shadow-lg hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-sm disabled:hover:brightness-100 cursor-pointer flex items-center justify-center gap-2"
+              className="mt-6 w-full rounded-sm bg-primary py-3.5 text-sm font-mono-chart font-semibold tracking-wide uppercase text-white transition-all hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:brightness-100 cursor-pointer flex items-center justify-center gap-2"
             >
-              Analyze Symptoms
+              Run Analysis
               <svg
-                width="16"
-                height="16"
+                width="15"
+                height="15"
                 viewBox="0 0 24 24"
-                fill="currentColor"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
               >
-                <path d="M13 3L4 14h7v7l9-11h-7z" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+                <polyline points="12 5 19 12 12 19" />
               </svg>
             </button>
           </form>
@@ -183,8 +176,8 @@ export function SymptomForm() {
         <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-6">
           <div className="trust-badge">
             <svg
-              width="14"
-              height="14"
+              width="13"
+              height="13"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -194,28 +187,29 @@ export function SymptomForm() {
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
               <polyline points="9 12 11 14 15 10" />
             </svg>
-            Privacy Encrypted
+            Nothing stored
           </div>
           <div className="trust-badge">
             <svg
-              width="14"
-              height="14"
+              width="13"
+              height="13"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
               className="text-primary shrink-0"
             >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
-            Clinical Standards
+            Results in seconds
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="mt-6 mx-auto max-w-2xl rounded-xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-800/50 dark:bg-red-950/30 animate-fade-in">
-          <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+        <div className="mt-6 mx-auto max-w-2xl rounded-sm border border-[var(--alert)]/30 bg-[var(--alert-soft)] px-4 py-3 animate-fade-in">
+          <p className="text-sm text-[var(--alert)]">{error}</p>
         </div>
       )}
     </div>

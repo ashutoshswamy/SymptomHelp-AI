@@ -1,6 +1,9 @@
 import { analyzeSymptoms } from "@/lib/gemini";
 import type { SymptomInput } from "@/lib/types";
 
+const MAX_SYMPTOMS_LENGTH = 2000;
+const VALID_GENDERS = new Set(["male", "female", "other"]);
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json()) as SymptomInput;
@@ -12,26 +15,46 @@ export async function POST(request: Request) {
       );
     }
 
-    if (body.symptoms.trim().length < 3) {
+    const symptoms = body.symptoms.trim();
+
+    if (symptoms.length < 3) {
       return Response.json(
         { error: "Invalid input", message: "Please provide more detail about your symptoms" },
         { status: 400 }
       );
     }
 
-    const result = await analyzeSymptoms({
-      symptoms: body.symptoms.trim(),
-      age: body.age,
-      gender: body.gender,
-    });
+    if (symptoms.length > MAX_SYMPTOMS_LENGTH) {
+      return Response.json(
+        { error: "Invalid input", message: "Please keep your description under 2000 characters" },
+        { status: 400 }
+      );
+    }
+
+    let age: number | undefined;
+    if (body.age !== undefined) {
+      const parsedAge = Number(body.age);
+      if (!Number.isFinite(parsedAge) || parsedAge < 0 || parsedAge > 120) {
+        return Response.json(
+          { error: "Invalid input", message: "Please provide a valid age between 0 and 120" },
+          { status: 400 }
+        );
+      }
+      age = parsedAge;
+    }
+
+    const gender =
+      typeof body.gender === "string" && VALID_GENDERS.has(body.gender)
+        ? body.gender
+        : undefined;
+
+    const result = await analyzeSymptoms({ symptoms, age, gender });
 
     return Response.json(result);
   } catch (error) {
     console.error("Analysis error:", error);
-    const message =
-      error instanceof Error ? error.message : "An unexpected error occurred";
     return Response.json(
-      { error: "Analysis failed", message },
+      { error: "Analysis failed", message: "We couldn't complete the analysis. Please try again." },
       { status: 500 }
     );
   }

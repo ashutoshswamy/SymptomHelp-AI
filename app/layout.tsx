@@ -1,11 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk } from "next/font/google";
+import { DM_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const dmSans = DM_Sans({
+  variable: "--font-plex-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const siteUrl = "https://symptomhelpai.in";
@@ -14,10 +20,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fffe" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0f1a" },
-  ],
+  themeColor: "#f3f4ef",
 };
 
 export const metadata: Metadata = {
@@ -50,12 +53,21 @@ export const metadata: Metadata = {
     title: "SymptomHelp AI - Free AI-Powered Symptom Checker & Health Analysis",
     description:
       "Describe your symptoms and get instant AI-powered health insights. Free symptom checker powered by Google Gemini.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1734,
+        height: 907,
+        alt: "SymptomHelp AI - Describe what you feel, we'll read the chart",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "SymptomHelp AI - Free AI-Powered Symptom Checker",
     description:
       "Describe your symptoms and get instant AI-powered health insights powered by Google Gemini.",
+    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -100,7 +112,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} h-full antialiased`}>
+    <html lang="en" className={`${dmSans.variable} ${plexMono.variable} h-full antialiased`}>
       <head>
         <script
           type="application/ld+json"
