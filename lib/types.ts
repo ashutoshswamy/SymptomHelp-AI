@@ -20,3 +20,15 @@ export interface AnalysisResponse {
   disclaimer: string;
   analyzedAt: string;
 }
+
+export interface Profile {
+  age?: number;
+  gender?: string;
+}
+
+export interface HistoryItem {
+  id: string;
+  symptoms: string;
+  result: AnalysisResponse;
+  createdAt: string;
+}

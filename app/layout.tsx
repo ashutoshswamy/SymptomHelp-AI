@@ -1,17 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Bricolage_Grotesque, DM_Sans } from "next/font/google";
 import "./globals.css";
+import "sileo/styles.css";
+import { AuthProvider } from "@/components/AuthProvider";
+import { CookieConsent } from "@/components/CookieConsent";
+import { AppToaster } from "@/components/AppToaster";
 
-const dmSans = DM_Sans({
-  variable: "--font-plex-sans",
+// Pinned by the user: Bricolage Grotesque (display, condensed via wdth axis) and DM Sans (body).
+const display = Bricolage_Grotesque({
+  variable: "--font-display",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  axes: ["wdth", "opsz"],
 });
 
-const plexMono = IBM_Plex_Mono({
-  variable: "--font-plex-mono",
+const body = DM_Sans({
+  variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 });
 
 const siteUrl = "https://symptomhelpai.in";
@@ -20,13 +24,16 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: "#f3f4ef",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#d5d8da" },
+    { media: "(prefers-color-scheme: dark)", color: "#1c0c24" },
+  ],
 };
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "SymptomHelp AI - Free AI-Powered Symptom Checker & Health Analysis",
+    default: "SymptomHelp AI: Free AI Symptom Checker",
     template: "%s | SymptomHelp AI",
   },
   description:
@@ -48,26 +55,26 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: siteUrl,
     siteName: "SymptomHelp AI",
-    title: "SymptomHelp AI - Free AI-Powered Symptom Checker & Health Analysis",
+    title: "SymptomHelp AI: Free AI Symptom Checker",
     description:
       "Describe your symptoms and get instant AI-powered health insights. Free symptom checker powered by Google Gemini.",
     images: [
       {
-        url: "/og-image.png",
-        width: 1734,
-        height: 907,
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
         alt: "SymptomHelp AI - Describe what you feel, we'll read the chart",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
+    creator: "@ashutoshswamy_",
     title: "SymptomHelp AI - Free AI-Powered Symptom Checker",
     description:
       "Describe your symptoms and get instant AI-powered health insights powered by Google Gemini.",
-    images: ["/og-image.png"],
+    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -80,9 +87,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  alternates: {
-    canonical: siteUrl,
-  },
 };
 
 export default function RootLayout({
@@ -92,34 +96,49 @@ export default function RootLayout({
 }>) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "SymptomHelp AI",
-    url: siteUrl,
-    description:
-      "Free AI-powered symptom checker that analyzes your symptoms and provides health insights using Google Gemini.",
-    applicationCategory: "HealthApplication",
-    operatingSystem: "Any",
-    offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "INR",
-    },
-    author: {
-      "@type": "Person",
-      name: "Ashutosh Swamy",
-      url: "https://github.com/ashutoshswamy",
-    },
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${siteUrl}/#website`,
+        name: "SymptomHelp AI",
+        url: siteUrl,
+        publisher: { "@id": `${siteUrl}/#org` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${siteUrl}/#org`,
+        name: "SymptomHelp AI",
+        url: siteUrl,
+        logo: `${siteUrl}/icon.svg`,
+        founder: { "@type": "Person", name: "Ashutosh Swamy", url: "https://github.com/ashutoshswamy" },
+      },
+      {
+        "@type": "WebApplication",
+        name: "SymptomHelp AI",
+        url: siteUrl,
+        description:
+          "Free AI-powered symptom checker that analyzes your symptoms and provides health insights using Google Gemini.",
+        applicationCategory: "HealthApplication",
+        operatingSystem: "Any",
+        offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+        publisher: { "@id": `${siteUrl}/#org` },
+      },
+    ],
   };
 
   return (
-    <html lang="en" className={`${dmSans.variable} ${plexMono.variable} h-full antialiased`}>
+    <html lang="en" className={`${display.variable} ${body.variable} h-full antialiased`}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <AuthProvider>{children}</AuthProvider>
+        <CookieConsent />
+        <AppToaster />
+      </body>
     </html>
   );
 }

@@ -1,176 +1,338 @@
 @import "tailwindcss";
 
+/*
+  Blister Pack.
+  Brushed foil ground, cream pressed cells, one tangerine printed tab.
+  Crimson exists only for high and critical results.
+  Fonts: Bricolage Grotesque (display) and DM Sans (body). Nothing else.
+  Grid: one 8px module. Cells are 20px radius, chips are pills.
+*/
 :root {
-  --paper: #f3f4ef;
-  --paper-raised: #ffffff;
-  --paper-raised-hover: #fbfbf8;
-  --ink: #1a2420;
-  --ink-muted: #5b665f;
-  --ink-faint: #8b948c;
-  --line: #d9d6c9;
-  --line-soft: #e7e5db;
+  color-scheme: light dark;
 
-  --pulse: #1f7a4d;
-  --pulse-soft: #e4f0e8;
-  --pulse-ink: #14532d;
+  --ground: #d5d8da;
+  --ground-hi: #eceef0;
+  --ground-lo: #b6bbbf;
+  --ink: #2a1233;
+  --ink-soft: #4d3b58;
+  --line: #9aa0a5;
 
-  --alert: #c1392b;
-  --alert-soft: #fbeae7;
+  --strip: #c9cdd0;
+  --field-bg: #f7efe2;
+  --field-ink: #2a1233;
 
-  --amber: #a9720c;
-  --amber-soft: #f6edd9;
+  --tab: #ff6b2c;
+  --tab-hover: #ff8250;
+  --tab-ink: #2a1233;
 
-  --severity-low: #1f7a4d;
-  --severity-moderate: #a9720c;
-  --severity-high: #c1392b;
-  --severity-critical: #8f1d13;
+  --crimson: #c4163a;
+  --sev-low: #2a1233;
+  --sev-moderate: #ff6b2c;
+  --sev-high: #c4163a;
+  --sev-critical: #8f0f2a;
 
-  --card-shadow: 0 1px 2px 0 rgb(26 36 32 / 0.05);
-  --card-shadow-hover: 0 6px 16px -4px rgb(26 36 32 / 0.10);
+  --mark-line: #f7efe2;
+  --cell-radius: 20px;
+  --shadow-strip: 0 1px 0 rgb(255 255 255 / 0.7) inset, 0 18px 36px -22px rgb(42 18 51 / 0.55);
 }
 
-@theme inline {
-  --color-background: var(--paper);
-  --color-foreground: var(--ink);
-  --color-primary: var(--pulse);
-  --color-surface: var(--paper-raised);
-  --color-surface-hover: var(--paper-raised-hover);
-  --color-border: var(--line);
-  --color-border-light: var(--line-soft);
-  --color-muted: var(--ink-muted);
-  --color-muted-light: var(--ink-faint);
-  --color-severity-low: var(--severity-low);
-  --color-severity-moderate: var(--severity-moderate);
-  --color-severity-high: var(--severity-high);
-  --color-severity-critical: var(--severity-critical);
-  --font-sans: var(--font-plex-sans);
-  --font-mono: var(--font-plex-mono);
-}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #1c0c24;
+    --ground-hi: #2b1636;
+    --ground-lo: #12071a;
+    --ink: #f7efe2;
+    --ink-soft: #cbbfd2;
+    --line: #4a3556;
 
-:root {
-  color-scheme: light;
-}
+    --strip: #2b1636;
+    --sev-low: #f7efe2;
+    --mark-line: #2a1233;
 
-body {
-  background:
-    linear-gradient(var(--line-soft) 1px, transparent 1px) 0 0 / 100% 28px,
-    var(--paper);
-  color: var(--ink);
-  font-family: var(--font-plex-sans), system-ui, sans-serif;
-}
-
-.font-mono-chart {
-  font-family: var(--font-plex-mono), ui-monospace, monospace;
-}
-
-/* Animations */
-@keyframes fill-bar {
-  from { width: 0%; }
-  to { width: var(--bar-width); }
-}
-
-@keyframes slide-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes pulse-gentle {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-@keyframes spin-slow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.animate-fill-bar {
-  animation: fill-bar 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  opacity: 0;
-}
-
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  opacity: 0;
-}
-
-.animate-pulse-gentle {
-  animation: pulse-gentle 2s ease-in-out infinite;
-}
-
-.animate-spin-slow {
-  animation: spin-slow 2s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .animate-fill-bar,
-  .animate-slide-up,
-  .animate-fade-in,
-  .animate-fade-in-up,
-  .animate-pulse-gentle,
-  .animate-spin-slow {
-    animation: none !important;
-    opacity: 1 !important;
+    --shadow-strip: 0 1px 0 rgb(255 255 255 / 0.06) inset, 0 22px 40px -22px rgb(0 0 0 / 0.8);
   }
 }
 
-/* Chart-entry number rail, left of each condition card heading */
-.chart-entry {
-  position: relative;
+@theme inline {
+  --color-ground: var(--ground);
+  --color-ground-hi: var(--ground-hi);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-strip: var(--strip);
+  --color-field: var(--field-bg);
+  --color-tab: var(--tab);
+  --color-tab-hover: var(--tab-hover);
+  --color-tab-ink: var(--tab-ink);
+  --color-crimson: var(--crimson);
 }
 
-/* Ink-stamp badge: slight rotation, double border, like a rubber stamp on a form */
-.stamp {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  border: 1.5px solid currentColor;
-  border-radius: 3px;
-  padding: 0.2em 0.65em;
-  transform: rotate(-1.5deg);
-  letter-spacing: 0.06em;
+body {
+  background-color: var(--ground);
+  /* brushed foil: fine vertical grain over a slow diagonal sheen, painted once */
+  background-image:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 3px),
+    linear-gradient(115deg, var(--ground-hi) 0%, var(--ground) 38%, var(--ground-lo) 62%, var(--ground) 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Trust / meta strip */
-.trust-badge {
+::selection {
+  background: var(--tab);
+  color: var(--tab-ink);
+}
+
+html {
+  scrollbar-color: var(--ink-soft) var(--ground);
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 800;
+  font-stretch: 75%;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* Only two typefaces on the site: no browser monospace */
+code {
+  font-family: inherit;
+  font-weight: 700;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* The foil strip that holds cells */
+.strip {
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.06) 0 1px, transparent 1px 3px),
+    linear-gradient(135deg, var(--ground-hi), var(--strip) 55%, var(--ground-lo));
+  border-radius: calc(var(--cell-radius) + 8px);
+  box-shadow: var(--shadow-strip);
+  border: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+}
+
+/* A pressed cell: a recessed well with a domed lip */
+.cell {
+  background: var(--field-bg);
+  color: var(--field-ink);
+  border-radius: var(--cell-radius);
+  box-shadow:
+    inset 0 3px 6px rgb(42 18 51 / 0.22),
+    inset 0 -2px 0 rgb(255 255 255 / 0.6),
+    0 1px 0 rgb(255 255 255 / 0.55);
+}
+
+/* Form fields are cells */
+.field {
+  width: 100%;
+  background: var(--field-bg);
+  color: var(--field-ink);
+  border: 2px solid transparent;
+  border-radius: var(--cell-radius);
+  padding: 0.9rem 1.1rem;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  box-shadow:
+    inset 0 3px 6px rgb(42 18 51 / 0.22),
+    inset 0 -2px 0 rgb(255 255 255 / 0.6);
+}
+.field::placeholder {
+  color: #655572;
+}
+.field:focus {
+  outline: none;
+  border-color: var(--tab);
+}
+.field:disabled {
+  opacity: 0.6;
+}
+
+/* Printed tab: the primary action, with a perforation above it */
+.tab {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: 3px;
-  border: 1px dashed var(--line);
-  background: var(--paper-raised);
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-muted);
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--tab);
+  color: var(--tab-ink);
+  border-radius: var(--cell-radius);
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 800;
+  font-stretch: 75%;
+  font-size: 1.5rem;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  padding: 1rem 1.75rem;
+  min-height: 3.5rem;
+  box-shadow: 0 3px 0 rgb(42 18 51 / 0.35), 0 14px 22px -12px rgb(255 107 44 / 0.6);
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1), background-color 160ms, box-shadow 160ms;
+  cursor: pointer;
+}
+.tab:hover:not(:disabled) {
+  background: var(--tab-hover);
+}
+.tab:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 rgb(42 18 51 / 0.35), 0 8px 14px -12px rgb(255 107 44 / 0.6);
+}
+.tab:disabled {
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+  color: var(--ink-soft);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--ink) 28%, transparent);
+  cursor: not-allowed;
+}
+.tab-outline {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--ink);
+}
+.tab-outline:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--ground);
+}
+
+.perforation {
+  border-top: 3px dotted color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+/* Cells that show a confidence: filled or punched out */
+.dot {
+  aspect-ratio: 1;
+  border-radius: 999px;
+}
+.dot-empty {
+  background: color-mix(in srgb, var(--ink) 14%, transparent);
+  box-shadow: inset 0 2px 3px rgb(0 0 0 / 0.25);
+}
+.dot-full {
+  background: var(--dot, var(--ink));
+  box-shadow: inset 0 -2px 3px rgb(0 0 0 / 0.25), inset 0 2px 2px rgb(255 255 255 / 0.35);
+}
+
+/* Motion: cells press in once; results fill cell by cell */
+@keyframes press-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fill-cell {
+  from { transform: scale(0.35); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
+
+.press-in {
+  animation: press-in 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.rise-in {
+  animation: rise-in 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.fill-cell {
+  animation: fill-cell 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--delay, 0ms);
+}
+.breathe {
+  animation: breathe 1400ms ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .press-in,
+  .rise-in,
+  .fill-cell,
+  .breathe {
+    animation: none !important;
+  }
+  .tab {
+    transition: none;
+  }
 }
 
 /* Focus visibility */
 a:focus-visible,
 button:focus-visible,
-input:focus-visible,
-textarea:focus-visible,
-select:focus-visible {
-  outline: 2px solid var(--pulse);
-  outline-offset: 2px;
+summary:focus-visible {
+  outline: 3px solid var(--tab);
+  outline-offset: 3px;
+}
+
+/* Long-form text (legal pages, about): comfortable measure, clear hierarchy */
+.prose-legal {
+  max-width: 68ch;
+}
+.prose-legal h2 {
+  font-size: 2.1rem;
+  line-height: 1;
+  margin-top: 2.75rem;
+  margin-bottom: 0.75rem;
+}
+.prose-legal h3 {
+  font-size: 1.5rem;
+  line-height: 1.1;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.prose-legal p,
+.prose-legal li {
+  color: var(--ink-soft);
+}
+.prose-legal p + p {
+  margin-top: 1rem;
+}
+.prose-legal ul {
+  list-style: disc;
+  padding-left: 1.4rem;
+  margin-top: 0.75rem;
+}
+.prose-legal li + li {
+  margin-top: 0.4rem;
+}
+.prose-legal a {
+  color: var(--ink);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Dark ink button, for use on the tangerine field */
+.tab-ink {
+  background: var(--ink);
+  color: var(--ground);
+  box-shadow: 0 3px 0 rgb(0 0 0 / 0.3);
+}
+.tab-ink:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--ink) 85%, var(--tab));
+}
+
+details.faq > summary {
+  list-style: none;
+  cursor: pointer;
+}
+details.faq > summary::-webkit-details-marker {
+  display: none;
+}
+details.faq[open] .faq-caret {
+  transform: rotate(180deg);
+}
+
+/* Very narrow phones (320 to 359px): keep primary labels on one line */
+@media (max-width: 359px) {
+  .tab {
+    font-size: 1.25rem;
+    padding-inline: 1rem;
+  }
 }

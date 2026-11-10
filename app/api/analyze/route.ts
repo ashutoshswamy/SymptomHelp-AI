@@ -1,10 +1,27 @@
 import { analyzeSymptoms } from "@/lib/gemini";
 import type { SymptomInput } from "@/lib/types";
+import { hasConsent, verifyIdToken } from "@/lib/verifyToken";
 
 const MAX_SYMPTOMS_LENGTH = 2000;
 const VALID_GENDERS = new Set(["male", "female", "other"]);
 
 export async function POST(request: Request) {
+  const token = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
+  const uid = token ? await verifyIdToken(token) : null;
+  if (!uid) {
+    return Response.json(
+      { error: "Unauthorized", message: "Please sign in to run an analysis" },
+      { status: 401 }
+    );
+  }
+
+  if (!(await hasConsent(uid, token!))) {
+    return Response.json(
+      { error: "Consent required", message: "Please confirm you are 18 or older and accept the Terms and Privacy Policy" },
+      { status: 403 }
+    );
+  }
+
   try {
     const body = (await request.json()) as SymptomInput;
 

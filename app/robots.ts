@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/api/",
+      disallow: "/api/", // ponytail: private pages use noindex, which needs crawl access
     },
     sitemap: "https://symptomhelpai.in/sitemap.xml",
   };

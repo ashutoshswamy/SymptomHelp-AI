@@ -1,12 +1,8 @@
 import type { MetadataRoute } from "next";
 
+const base = "https://symptomhelpai.in";
+const pages = ["", "/about", "/faq", "/contact", "/terms", "/privacy", "/cookies", "/disclaimer"];
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: "https://symptomhelpai.in",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-  ];
+  return pages.map((p) => ({ url: `${base}${p}` }));
 }

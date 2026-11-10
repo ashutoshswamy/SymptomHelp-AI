@@ -1,28 +1,53 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { ArrowRight, CaretDown } from "@phosphor-icons/react";
+import { sileo } from "sileo";
 import type { AnalysisResponse } from "@/lib/types";
+import { loadProfile, saveAnalysis, saveProfile } from "@/lib/store";
+import { useAuth } from "./AuthProvider";
 import { LoadingState } from "./LoadingState";
 import { ResultsDisplay } from "./ResultsDisplay";
 
+// The checker itself. Rendered inside <RequireAuth>, so a signed-in, consented user is assumed.
 export function SymptomForm() {
+  const { user } = useAuth();
   const [symptoms, setSymptoms] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [results, setResults] = useState<AnalysisResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+
+  // Prefill age and sex from the saved profile.
+  useEffect(() => {
+    if (!user) return;
+    let live = true;
+    loadProfile(user.uid)
+      .then((p) => {
+        if (!live) return;
+        if (p.age !== undefined) setAge(String(p.age));
+        if (p.gender) setGender(p.gender);
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, [user]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!user) return;
     setIsLoading(true);
-    setError(null);
     setResults(null);
 
     try {
+      const token = await user.getIdToken();
       const response = await fetch("/api/analyze", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({
           symptoms,
           age: age ? Number(age) : undefined,
@@ -37,8 +62,20 @@ export function SymptomForm() {
 
       const data: AnalysisResponse = await response.json();
       setResults(data);
+      // Saving must never block showing the result.
+      const input = { symptoms, age: age ? Number(age) : undefined, gender: gender || undefined };
+      Promise.all([saveAnalysis(user.uid, input, data), saveProfile(user.uid, input)]).catch((e) => {
+        console.error("Could not save history", e);
+        sileo.warning({
+          title: "Not saved to history",
+          description: "Your result is shown, but we couldn't save it to your account.",
+        });
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      sileo.error({
+        title: "Analysis failed",
+        description: err instanceof Error ? err.message : "Something went wrong",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -47,56 +84,44 @@ export function SymptomForm() {
   const handleReset = () => {
     setResults(null);
     setSymptoms("");
-    setAge("");
-    setGender("");
-    setError(null);
   };
 
-  if (isLoading) {
-    return <LoadingState symptoms={symptoms} />;
-  }
-
-  if (results) {
-    return (
-      <ResultsDisplay
-        results={results}
-        symptoms={symptoms}
-        onReset={handleReset}
-      />
-    );
-  }
+  if (isLoading) return <LoadingState symptoms={symptoms} />;
+  if (results) return <ResultsDisplay results={results} symptoms={symptoms} onReset={handleReset} />;
 
   return (
-    <div>
-      {/* Hero Section */}
-      <div className="text-center pt-10 pb-8 sm:pt-16 sm:pb-12">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-foreground leading-[1.1]">
-          Describe what you feel.
-          <br />
-          <span className="text-primary">We&rsquo;ll read the chart.</span>
-        </h1>
-        <p className="mt-4 text-sm sm:text-base text-muted max-w-md mx-auto leading-relaxed px-2">
-          Enter symptoms in your own words. Our Gemini-powered engine
-          cross-references them against clinical patterns and returns a
-          ranked read-out.
-        </p>
-      </div>
+    <div className="mx-auto max-w-6xl">
+      <section className="grid gap-10 pt-8 sm:pt-14 lg:grid-cols-12 lg:gap-8 lg:pt-16">
+        <div className="lg:col-span-7 lg:pt-4">
+          <h1 className="rise-in text-[clamp(3.25rem,11vw,6rem)] leading-[0.95] text-ink">
+            Tell us
+            <br />
+            what you
+            <br />
+            <span className="text-tab-ink dark:text-tab">feel.</span>
+          </h1>
+          <p
+            className="rise-in mt-6 max-w-[34ch] text-lg text-ink-soft sm:text-xl"
+            style={{ "--delay": "300ms" } as React.CSSProperties}
+          >
+            Describe your symptoms in your own words. Get a ranked list of what it could be and when
+            to see a doctor.
+          </p>
+          <p className="mt-6 max-w-[40ch] text-ink-soft">
+            If this is an emergency, call your local emergency number now (112 in India).
+          </p>
+        </div>
 
-      {/* Form Card */}
-      <div className="mx-auto max-w-2xl">
-        <div className="rounded-md border border-border bg-surface shadow-[var(--card-shadow)] hover:shadow-[var(--card-shadow-hover)] transition-shadow overflow-hidden">
-          <div className="flex items-center px-4 sm:px-6 py-3 border-b border-dashed border-border">
-            <span className="font-mono-chart text-[10px] tracking-[0.15em] uppercase text-muted">
-              Patient Intake
-            </span>
-          </div>
+        <div className="lg:col-span-5 lg:mt-10">
+          <form
+            onSubmit={handleSubmit}
+            className="strip press-in p-5 sm:p-7"
+            style={{ "--delay": "150ms" } as React.CSSProperties}
+          >
+            <h2 className="text-3xl text-ink">Your symptoms</h2>
 
-          <form onSubmit={handleSubmit} className="p-4 sm:p-6 md:p-8 pt-5 sm:pt-6">
-            <label
-              htmlFor="symptoms"
-              className="flex items-baseline gap-2 font-mono-chart text-[11px] font-semibold tracking-wider uppercase text-foreground mb-2"
-            >
-              <span className="text-primary">01</span> Symptoms
+            <label htmlFor="symptoms" className="mt-5 mb-2 block font-bold text-ink">
+              What is going on?
             </label>
             <textarea
               id="symptoms"
@@ -104,114 +129,67 @@ export function SymptomForm() {
               maxLength={2000}
               value={symptoms}
               onChange={(e) => setSymptoms(e.target.value)}
-              placeholder="Example: I've had a dull ache in my lower back for 3 days, worsening when I sit down. Also feeling slight fatigue..."
-              className="w-full rounded-sm border border-border bg-background px-4 py-3.5 text-sm text-foreground placeholder:text-muted-light focus:border-primary focus:outline-none transition-colors resize-none"
+              placeholder="A dull ache in my lower back for 3 days, worse when I sit. Some tiredness too."
+              className="field resize-none"
               disabled={isLoading}
+              required
             />
 
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:gap-4">
+            <div className="mt-5 grid grid-cols-2 gap-4">
               <div>
-                <label
-                  htmlFor="age"
-                  className="flex items-baseline gap-2 font-mono-chart text-[11px] font-semibold tracking-wider uppercase text-foreground mb-2"
-                >
-                  <span className="text-primary">02</span> Age
+                <label htmlFor="age" className="mb-2 block font-bold text-ink">
+                  Age <span className="font-normal text-ink-soft">(optional)</span>
                 </label>
                 <input
                   id="age"
                   type="number"
+                  inputMode="numeric"
                   min={0}
                   max={120}
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
                   placeholder="Years"
-                  className="w-full rounded-sm border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-light focus:border-primary focus:outline-none transition-colors"
+                  className="field"
                   disabled={isLoading}
                 />
               </div>
               <div>
-                <label
-                  htmlFor="gender"
-                  className="flex items-baseline gap-2 font-mono-chart text-[11px] font-semibold tracking-wider uppercase text-foreground mb-2"
-                >
-                  <span className="text-primary">03</span> Sex
+                <label htmlFor="gender" className="mb-2 block font-bold text-ink">
+                  Sex <span className="font-normal text-ink-soft">(optional)</span>
                 </label>
-                <select
-                  id="gender"
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  className="w-full rounded-sm border border-border bg-background px-4 py-3 text-sm text-foreground focus:border-primary focus:outline-none transition-colors appearance-none cursor-pointer"
-                  disabled={isLoading}
-                >
-                  <option value="">Select</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
+                <div className="relative">
+                  <select
+                    id="gender"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    className="field cursor-pointer appearance-none pr-10"
+                    disabled={isLoading}
+                  >
+                    <option value="">Select</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                  <CaretDown
+                    size={18}
+                    weight="bold"
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[#2a1233]"
+                  />
+                </div>
               </div>
             </div>
 
-            <button
-              type="submit"
-              disabled={isLoading || !symptoms.trim()}
-              className="mt-6 w-full rounded-sm bg-primary py-3.5 text-sm font-mono-chart font-semibold tracking-wide uppercase text-white transition-all hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:brightness-100 cursor-pointer flex items-center justify-center gap-2"
-            >
-              Run Analysis
-              <svg
-                width="15"
-                height="15"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-              >
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </button>
+
+            <div className="perforation mt-7 pt-6">
+              <button type="submit" disabled={isLoading || !symptoms.trim()} className="tab w-full">
+                Analyze symptoms
+                <ArrowRight size={24} weight="bold" aria-hidden="true" />
+              </button>
+            </div>
           </form>
         </div>
-
-        {/* Trust Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mt-6">
-          <div className="trust-badge">
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="text-primary shrink-0"
-            >
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              <polyline points="9 12 11 14 15 10" />
-            </svg>
-            Nothing stored
-          </div>
-          <div className="trust-badge">
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              className="text-primary shrink-0"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 16 14" />
-            </svg>
-            Results in seconds
-          </div>
-        </div>
-      </div>
-
-      {error && (
-        <div className="mt-6 mx-auto max-w-2xl rounded-sm border border-[var(--alert)]/30 bg-[var(--alert-soft)] px-4 py-3 animate-fade-in">
-          <p className="text-sm text-[var(--alert)]">{error}</p>
-        </div>
-      )}
+      </section>
     </div>
   );
 }

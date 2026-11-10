@@ -1,10 +1,12 @@
 "use client";
 
+import { Clock, FirstAid, Siren, Stethoscope } from "@phosphor-icons/react";
+
 const config = {
-  routine: { color: "var(--ink-muted)", label: "Routine checkup" },
-  soon: { color: "var(--pulse)", label: "See doctor soon" },
-  urgent: { color: "var(--amber)", label: "Seek care promptly" },
-  emergency: { color: "var(--severity-critical)", label: "Seek emergency care" },
+  routine: { Icon: Clock, label: "Routine checkup" },
+  soon: { Icon: Stethoscope, label: "See doctor soon" },
+  urgent: { Icon: FirstAid, label: "Seek care promptly" },
+  emergency: { Icon: Siren, label: "Seek emergency care" },
 } as const;
 
 export function UrgencyIndicator({
@@ -12,14 +14,15 @@ export function UrgencyIndicator({
 }: {
   urgency: "routine" | "soon" | "urgent" | "emergency";
 }) {
-  const { color, label } = config[urgency];
+  const { Icon, label } = config[urgency];
+  const strong = urgency === "urgent" || urgency === "emergency";
   return (
     <span
-      className={`inline-flex items-center gap-1.5 text-xs font-medium ${
-        urgency === "emergency" ? "animate-pulse-gentle" : ""
+      className={`inline-flex items-center gap-1.5 text-base ${
+        strong ? "font-bold" : "font-medium text-ink-soft"
       }`}
-      style={{ color }}
     >
+      <Icon size={18} weight={strong ? "fill" : "bold"} aria-hidden="true" />
       {label}
     </span>
   );

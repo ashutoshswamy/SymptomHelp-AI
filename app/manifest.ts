@@ -8,13 +8,13 @@ export default function manifest(): MetadataRoute.Manifest {
       "Free AI-powered symptom checker that analyzes your symptoms and provides health insights.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f3f4ef",
-    theme_color: "#f3f4ef",
+    background_color: "#d5d8da",
+    theme_color: "#d5d8da",
     icons: [
       {
-        src: "/favicon.ico",
+        src: "/icon.svg",
         sizes: "any",
-        type: "image/x-icon",
+        type: "image/svg+xml",
       },
     ],
   };

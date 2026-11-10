@@ -1,10 +1,11 @@
 "use client";
 
+// Printed chips. Crimson (high, critical) is the only place the page ever uses it.
 const config = {
-  low: { color: "var(--severity-low)", label: "Low Risk" },
-  moderate: { color: "var(--severity-moderate)", label: "Moderate" },
-  high: { color: "var(--severity-high)", label: "High Urgency" },
-  critical: { color: "var(--severity-critical)", label: "Critical" },
+  low: { bg: "var(--field-bg)", fg: "#2a1233", label: "Low risk" },
+  moderate: { bg: "var(--tab)", fg: "#2a1233", label: "Moderate" },
+  high: { bg: "var(--sev-high)", fg: "#ffffff", label: "High urgency" },
+  critical: { bg: "var(--sev-critical)", fg: "#ffffff", label: "Critical" },
 } as const;
 
 export function SeverityBadge({
@@ -14,20 +15,18 @@ export function SeverityBadge({
   severity: "low" | "moderate" | "high" | "critical";
   urgency?: "routine" | "soon" | "urgent" | "emergency";
 }) {
-  const { color, label } = config[severity];
+  const { bg, fg, label } = config[severity];
   const displayLabel =
     urgency === "emergency"
       ? "Emergency"
       : urgency === "urgent"
-        ? "High Urgency"
+        ? "High urgency"
         : label;
 
   return (
     <span
-      className={`stamp font-mono-chart text-[10px] font-semibold uppercase ${
-        severity === "critical" ? "animate-pulse-gentle" : ""
-      }`}
-      style={{ color }}
+      className="inline-block rounded-full px-3 py-1 text-sm font-bold leading-none"
+      style={{ backgroundColor: bg, color: fg }}
     >
       {displayLabel}
     </span>
